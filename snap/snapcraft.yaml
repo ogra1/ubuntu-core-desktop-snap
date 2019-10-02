@@ -1,0 +1,55 @@
+name: ubuntu-core-desktop
+base: core18
+version: '0.1'
+summary: A minimal Ubuntu Desktop to be run on Ubuntu Core images
+description: |
+  Run a minimal Ubuntu Desktop on top of mir-kiosk in an Ubuntu Core system
+
+grade: stable
+confinement: strict
+
+apps:
+  desktop-session:
+    command: xwayland-kiosk-launch gdm3
+    daemon: simple
+    slots: [ x11 ]
+    environment:
+      XWAYLAND_FULLSCREEN_WINDOW_HINT: 'window_role="desktop-session"'
+    plugs:
+      - avahi-observe
+      - browser-support
+      - hardware-observe
+      - home
+      - mount-observe
+      - network
+      - network-bind
+      - network-manager
+      - opengl
+      - password-manager-service
+      - process-control
+      - pulseaudio
+      - removable-media
+      - screen-inhibit-control
+      - wayland
+      - x11-plug
+
+plugs:
+  x11-plug:
+    interface: x11
+
+parts:
+  gdm:
+    plugin: nil
+    stage-packages:
+      - gdm3
+  xwayland-kiosk-helper:
+    source: https://github.com/gerboland/xwayland-kiosk-helper.git
+    plugin: cmake
+    source-subdir: xwayland-preload
+    build-packages:
+      - build-essential
+    stage-packages:
+      - xwayland
+      - i3
+      - libegl1-mesa
+      - libgl1-mesa-glx
