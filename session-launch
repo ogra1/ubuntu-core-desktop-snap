@@ -1,0 +1,183 @@
+#!/bin/bash
+set -e
+
+# Create $XDG_RUNTIME_DIR if not exists (to be removed when LP: #1738197 is fixed)
+[ -n "$XDG_RUNTIME_DIR" ] && mkdir -p $XDG_RUNTIME_DIR -m 700
+
+# Wayland socket management
+wdisplay="wayland-0"
+if [ -n "$WAYLAND_DISPLAY" ]; then
+  wdisplay="$WAYLAND_DISPLAY"
+fi
+wayland_sockpath="$XDG_RUNTIME_DIR/../$wdisplay"
+wayland_snappath="$XDG_RUNTIME_DIR/$wdisplay"
+
+# Detect old interface usage
+if [ -n "${WAYLAND_SOCKET_DIR-}" ]; then
+  echo "#################################################################################"
+  echo "NOTICE: the 'wayland-socket-dir' interface has been removed!"
+  echo "Remove reference to it and WAYLAND_SOCKET_DIR from your snapcraft.yaml."
+  echo ""
+  echo "Consult the instructions in"
+  echo "https://github.com/MirServer/xwayland-kiosk-helper/blob/master/snapcraft.yaml"
+  echo "#################################################################################"
+  exit 5
+fi
+
+# If running on Classic, a Wayland socket may be in the usual XDG_RUNTIME_DIR
+if [ ! -S "$wayland_snappath" ]; then
+  # Either running on Core, or no Wayland socket to be found
+  if [ ! -S "$wayland_sockpath" ]; then
+    echo "Error: Unable to find a valid Wayland socket in $(dirname $XDG_RUNTIME_DIR)"
+    echo "Is a Wayland server running?"
+
+    # On Core, Xwayland needs to run as root (bug lp:1767372), so everything has to
+    if [ "$EUID" -ne 0 ]; then
+      echo "You could try running as root"
+    fi
+    # It may be that the socket isn't there yet, in case we will get restarted by systemd,
+    # wait a couple seconds to give the other side time to prepare
+    # For mir-kiosk, https://github.com/MirServer/mir/issues/586 would solve it proper
+    sleep 1
+    exit 1
+  fi
+
+  # If on Core, existance of the socket does not imply ability to open it (AppArmor can deny that)
+  # - opening it is only way to be sure it can be used
+  attempted_open=$(cat "$wayland_sockpath" 2>&1) || true;
+
+  if [[ $attempted_open = *"Permission denied"* ]]; then
+    echo "##################################################################################"
+    echo "You may need to connect this snap to one which implements the 'wayland' plug."
+    echo ""
+    echo "You can do this with these commands:"
+    echo "  snap install mir-kiosk"
+    echo "  snap connect $SNAP_NAME:wayland mir-kiosk:wayland"
+    echo "##################################################################################"
+    exit 2
+  fi
+
+  # if running under wayland, use it
+  #export WAYLAND_DEBUG=1
+  # create the compat symlink for now
+  if [ ! -e "$wayland_snappath" ]; then
+    ln -s "$wayland_sockpath" "$wayland_snappath"
+  fi
+fi
+
+# This snap provides both an X11 server and an X11 client which needs to connect to it. To allow
+# this to work correctly, need to be both an X11 slot and X11 plug, and have them connected.
+# Detect the X11 plug/slot connected by verifying access to fontconfig directory.
+attempted_open=$(ls "/var/cache/fontconfig/" 2>&1) || true;
+
+if [[ $attempted_open = *"Permission denied"* ]]; then
+  echo "##################################################################################"
+  echo "If you are experiencing problems with your GUI app (e.g. bad fonts), please run:"
+  echo "  snap connect $SNAP_NAME:x11-plug $SNAP_NAME:x11"
+  echo "##################################################################################"
+fi
+
+# If necessary, set up minimal environment for Xwayland to function
+if [ -z ${LIBGL_DRIVERS_PATH+x} ]; then
+  if [ "$SNAP_ARCH" == "amd64" ]; then
+    ARCH="x86_64-linux-gnu"
+  elif [ "$SNAP_ARCH" == "armhf" ]; then
+    ARCH="arm-linux-gnueabihf"
+  elif [ "$SNAP_ARCH" == "arm64" ]; then
+    ARCH="aarch64-linux-gnu"
+  else
+    ARCH="$SNAP_ARCH-linux-gnu"
+  fi
+
+  export LIBGL_DRIVERS_PATH=$SNAP/usr/lib/$ARCH/dri
+fi
+
+# Use new port number in case old server clean up wasn't successful
+let port=$RANDOM%100
+# Avoid low numbers as they may be used by desktop
+let port+=4
+
+# Launch Xwayland.
+SNAPPY_PRELOAD=$SNAP \
+LD_PRELOAD=$SNAP/lib/libxwayland-preload.so \
+  $SNAP/usr/bin/Xwayland -terminate :${port} &
+
+trap "trap - SIGTERM EXIT && kill -- -$$" SIGINT SIGTERM SIGQUIT EXIT # kill on signal or quit
+sleep 1 # FIXME - Xwayland does emit SIGUSR1 when ready for client connections
+
+# Set the X environment
+export DISPLAY=":${port}"
+export GDK_BACKEND="x11"
+export CLUTTER_BACKEND="x11"
+export QT_QPA_PLATFORM="xcb"
+
+export NO_AT_BRIDGE=1
+export XDG_SESSION_TYPE="x11"
+export GDK_BACKEND=x11
+export XDG_SEAT=seat0
+export XDG_SEAT_PATH=/org/freedesktop/DesktopManager/Seat0
+export XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+export LOCPATH="${SNAP}"/usr/lib/locale
+
+if ! [ -d "${LOCPATH}"/en_US.utf8 ]; then
+	# locales-all package isn't staged, locale data needs to be generated manually
+	export I18NPATH="${SNAP}"/usr/share/i18n
+	LOCPATH="${SNAP_USER_COMMON}"/.local/lib/locale
+	if [ ! -d "${LOCPATH}" ]; then
+		mkdir \
+			--parents \
+			"${LOCPATH}"
+	fi
+
+	declare locale; for locale_variable_name in \
+		LANG \
+		LC_CTYPE \
+		LC_NUMERIC \
+		LC_TIME \
+		LC_COLLATE \
+		LC_MONETARY \
+		LC_MESSAGES \
+		LC_PAPER \
+		LC_NAME \
+		LC_ADDRESS \
+		LC_TELEPHONE \
+		LC_MEASUREMENT \
+		LC_IDENTIFICATION; do
+		declare -n locale_variable="${locale_variable_name}"
+
+		if ! test -v locale_variable \
+			|| test -z "${locale_variable}" \
+			|| test "${locale_variable}" = C.UTF-8 \
+			|| test "${locale_variable}" = C; then
+			continue
+		fi
+
+		locale="$(
+			cut \
+				--delimiter=. \
+				--fields=1 \
+				<<< "${locale_variable}"
+		)"
+
+		if [ ! -d "${LOCPATH}"/"${locale}".UTF-8 ]; then
+			printf -- \
+				'locales-launch: Data of %s locale not found, generating, please wait...\n' \
+				"${locale}" \
+				>&2
+			localedef \
+				--charmap=UTF-8 \
+				--inputfile="${locale}" \
+				"${LOCPATH}"/"${locale}".UTF-8 \
+				|| true # Don't errexit when fail (ret=1, 4)
+		fi
+
+		unset -n locale_variable
+	done; unset I18NPATH locale
+fi
+
+/usr/bin/dbus-daemon --config-file=$SNAP/usr/share/dbus-1/session.conf \
+    --session --address=systemd: --nofork --nopidfile \
+    --systemd-activation --syslog-only &
+
+# Launch the X11 process passed in
+exec "$@"

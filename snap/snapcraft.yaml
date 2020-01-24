@@ -10,46 +10,645 @@ confinement: strict
 
 apps:
   desktop-session:
-    command: xwayland-kiosk-launch gdm3
+    command: desktop-launch session-launch gnome-session
     daemon: simple
     slots: [ x11 ]
     environment:
-      XWAYLAND_FULLSCREEN_WINDOW_HINT: 'window_role="desktop-session"'
+      GNOME_SHELL_SESSION_MODE: ubuntu
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/NetworkManager:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/avahi:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/bluetooth:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/caca:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/colord-plugins:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/enchant:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/engines-1.1:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/fcitx:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/girepository-1.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/glib-2.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-keyring:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer-1.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer1.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gvfs:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/krb5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/ldb:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libcanberra-0.30:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgnome-desktop-3-17:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgphoto2:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgphoto2_port:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk-3-0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk2.0-0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libunity:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libv4l:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libv4lconvert0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mutter:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/nautilus:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/nss:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/p11-kit:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkcs11:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/polkit-1:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/sane:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/sasl2:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/tracker-2.0:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0:$SNAP/usr/lib/NetworkManager:$SNAP/usr/lib/X11:$SNAP/usr/lib/accountsservice:$SNAP/usr/lib/apg:$SNAP/usr/lib/aspell:$SNAP/usr/lib/at-spi2-core:$SNAP/usr/lib/binfmt.d:$SNAP/usr/lib/colord:$SNAP/usr/lib/dbus-1.0:$SNAP/usr/lib/dconf:$SNAP/usr/lib/emacsen-common:$SNAP/usr/lib/environment.d:$SNAP/usr/lib/evolution:$SNAP/usr/lib/evolution-data-server:$SNAP/usr/lib/gcc:$SNAP/usr/lib/gcr:$SNAP/usr/lib/gdm3:$SNAP/usr/lib/geoclue-2.0:$SNAP/usr/lib/girepository-1.0:$SNAP/usr/lib/gjs:$SNAP/usr/lib/glib-networking:$SNAP/usr/lib/gnome-control-center:$SNAP/usr/lib/gnome-session:$SNAP/usr/lib/gnome-settings-daemon:$SNAP/usr/lib/gnome-settings-daemon-3.0:$SNAP/usr/lib/gnome-shell:$SNAP/usr/lib/gnome-terminal:$SNAP/usr/lib/gnupg:$SNAP/usr/lib/gnupg2:$SNAP/usr/lib/gvfs:$SNAP/usr/lib/ibus:$SNAP/usr/lib/initramfs-tools:$SNAP/usr/lib/ispell:$SNAP/usr/lib/kernel:$SNAP/usr/lib/language-selector:$SNAP/usr/lib/lightdm:$SNAP/usr/lib/locale:$SNAP/usr/lib/mime:$SNAP/usr/lib/mozilla:$SNAP/usr/lib/mutter:$SNAP/usr/lib/pm-utils:$SNAP/usr/lib/policykit-1:$SNAP/usr/lib/pppd:$SNAP/usr/lib/python2.7:$SNAP/usr/lib/python3:$SNAP/usr/lib/python3.6:$SNAP/usr/lib/sasl2:$SNAP/usr/lib/ssl:$SNAP/usr/lib/systemd:$SNAP/usr/lib/tc:$SNAP/usr/lib/ubiquity:$SNAP/usr/lib/udisks2:$SNAP/usr/lib/upower:$SNAP/usr/lib/valgrind:$SNAP/usr/lib/xorg::$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/eog:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/org.gnome.Characters:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gedit:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-documents
     plugs:
       - avahi-observe
+      - account-control
       - browser-support
       - hardware-observe
       - home
+      - login-session-control
+      - login-session-observe
+      - log-observe
       - mount-observe
       - network
+      - network-control
+      - network-setup-control
       - network-bind
       - network-manager
       - opengl
       - password-manager-service
+      - physical-memory-observe
       - process-control
       - pulseaudio
       - removable-media
       - screen-inhibit-control
+      - system-observe
+      - shutdown
       - wayland
       - x11-plug
-
 plugs:
   x11-plug:
     interface: x11
+#passthrough:
+#  system-usernames:
+#    snap_daemon: shared
+#
+layout:
+  /etc/gdm3:
+    bind: $SNAP/etc/gdm3
+  /etc/xdg:
+    bind: $SNAP/etc/xdg
+  /etc/X11:
+    bind: $SNAP/etc/X11
+  /etc/dbus-1:
+    bind: $SNAP/etc/dbus-1
+  /etc/pam.d/gdm-autologin:
+    symlink: $SNAP/etc/pam.d/gdm-autologin
+  /etc/pam.d/gdm-fingerprint:
+    symlink: $SNAP/etc/pam.d/gdm-fingerprint
+  /etc/pam.d/gdm-launch-environment:
+    symlink: $SNAP/etc/pam.d/gdm-launch-environment
+  /etc/pam.d/gdm-password:
+    symlink: $SNAP/etc/pam.d/gdm-password
+  /etc/pam.d/lightdm:
+    symlink: $SNAP/etc/pam.d/lightdm
+  /etc/pam.d/lightdm-autologin:
+    symlink: $SNAP/etc/pam.d/lightdm-autologin
+  /etc/pam.d/lightdm-greeter:
+    symlink: $SNAP/etc/pam.d/lightdm-greeter
+  /lib/udev/rules.d/61-gdm.rules:
+    bind-file: $SNAP/lib/udev/rules.d/61-gdm.rules
+  /usr/lib/dconf:
+    bind: $SNAP/usr/lib/dconf
+  /usr/lib/gvfs:
+    bind: $SNAP/usr/lib/gvfs
+  /usr/lib/gnome-session:
+    bind: $SNAP/usr/lib/gnome-session
+  /usr/lib/ibus:
+    bind: $SNAP/usr/lib/ibus
+  /usr/lib/at-spi2-core:
+    bind: $SNAP/usr/lib/at-spi2-core
+  /usr/lib/gnome-shell:
+    bind: $SNAP/usr/lib/gnome-shell
+  /usr/lib/gdm3:
+    bind: $SNAP/usr/lib/gdm3
+  /usr/lib/evolution:
+    bind: $SNAP/usr/lib/evolution
+  /usr/lib/gjs/girepository-1.0:
+    bind: $SNAP/usr/lib/gjs/girepository-1.0
+  /usr/lib/evolution-data-server:
+    bind: $SNAP/usr/lib/evolution-data-server
+  /usr/lib/gnome-settings-daemon:
+    bind: $SNAP/usr/lib/gnome-settings-daemon
+  /usr/lib/gnome-terminal:
+    bind: $SNAP/usr/lib/gnome-terminal
+  /usr/lib/locale:
+    bind: $SNAP/usr/lib/locale
+  /usr/lib/systemd/user:
+    bind: $SNAP/usr/lib/systemd/user
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gdk-pixbuf-2.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gio:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gio
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/girepository-1.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/girepository-1.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/glib-2.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/glib-2.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-keyring:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-keyring
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer-1.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer-1.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mutter:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mutter
+  /usr/lib/lightdm:
+    bind: $SNAP/usr/lib/lightdm
+  /usr/lib/NetworkManager:
+    bind: $SNAP/usr/lib/NetworkManager
+  /usr/lib/accountsservice:
+    bind: $SNAP/usr/lib/accountsservice
+  /usr/lib/apg:
+    bind: $SNAP/usr/lib/apg
+  /usr/lib/aspell:
+    bind: $SNAP/usr/lib/aspell
+  /usr/lib/colord:
+    bind: $SNAP/usr/lib/colord
+  /usr/lib/dbus-1.0:
+    bind: $SNAP/usr/lib/dbus-1.0
+  /usr/lib/emacsen-common:
+    bind: $SNAP/usr/lib/emacsen-common
+  /usr/lib/gcr:
+    bind: $SNAP/usr/lib/gcr
+  /usr/lib/geoclue-2.0:
+    bind: $SNAP/usr/lib/geoclue-2.0
+  /usr/lib/glib-networking:
+    bind: $SNAP/usr/lib/glib-networking
+  /usr/lib/gnome-control-center:
+    bind: $SNAP/usr/lib/gnome-control-center
+  /usr/lib/gnupg:
+    bind: $SNAP/usr/lib/gnupg
+  /usr/lib/language-selector:
+    bind: $SNAP/usr/lib/language-selector
+  /usr/lib/mime:
+    bind: $SNAP/usr/lib/mime
+  /usr/lib/mutter:
+    bind: $SNAP/usr/lib/mutter
+  /usr/lib/pm-utils/sleep.d:
+    bind: $SNAP/usr/lib/pm-utils/sleep.d
+  /usr/lib/policykit-1:
+    bind: $SNAP/usr/lib/policykit-1
+  /usr/lib/ssl/misc:
+    bind: $SNAP/usr/lib/ssl/misc
+  /usr/lib/systemd/user-environment-generators:
+    bind: $SNAP/usr/lib/systemd/user-environment-generators
+  /usr/lib/udisks2:
+    bind: $SNAP/usr/lib/udisks2
+  /usr/lib/tracker:
+    bind: $SNAP/usr/lib/tracker
+  /usr/lib/gnome-online-accounts:
+    bind: $SNAP/usr/lib/gnome-online-accounts
+  /usr/lib/upower:
+    bind: $SNAP/usr/lib/upower
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/evince:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/evince
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer1.0/gstreamer-1.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer1.0/gstreamer-1.0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgnome-desktop-3-17:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgnome-desktop-3-17
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk-3-0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk-3-0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk2.0-0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libgtk2.0-0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libv4lconvert0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libv4lconvert0
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/p11-kit:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/p11-kit
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.0
+  /lib/$SNAPCRAFT_ARCH_TRIPLET/security/pam_gnome_keyring.so:
+    bind-file: $SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET/security/pam_gnome_keyring.so
+  /lib/$SNAPCRAFT_ARCH_TRIPLET/security/pam_kwallet.so:
+    bind-file: $SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET/security/pam_kwallet.so
+  /lib/$SNAPCRAFT_ARCH_TRIPLET/security/pam_kwallet5.so:
+    bind-file: $SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET/security/pam_kwallet5.so
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/org.gnome.Characters:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/org.gnome.Characters
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/folks:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/folks
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-documents:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-documents
+  /usr/share/defaults:
+    bind: $SNAP/usr/share/defaults
+  /usr/share/dconf:
+    bind: $SNAP/usr/share/dconf
+  /usr/share/gdm:
+    bind: $SNAP/usr/share/gdm
+  /usr/share/gnome-documents:
+    bind: $SNAP/usr/share/gnome-documents
+  /usr/share/gnome-session:
+    bind: $SNAP/usr/share/gnome-session
+  /usr/share/gnome-shell:
+    bind: $SNAP/usr/share/gnome-shell
+  /usr/share/gnome-settings-daemon:
+    bind: $SNAP/usr/share/gnome-settings-daemon
+  /usr/share/gnome-control-center:
+    bind: $SNAP/usr/share/gnome-control-center
+  /usr/share/gnome-background-properties:
+    bind: $SNAP/usr/share/gnome-background-properties
+  /usr/share/gnome-system-monitor:
+    bind: $SNAP/usr/share/gnome-system-monitor
+  /usr/share/gnome:
+    bind: $SNAP/usr/share/gnome
+  /usr/share/gnupg:
+    bind: $SNAP/usr/share/gnupg
+  /usr/share/gst-plugins-base:
+    bind: $SNAP/usr/share/gst-plugins-base
+  /usr/share/gstreamer-1.0:
+    bind: $SNAP/usr/share/gstreamer-1.0
+  /usr/share/glvnd:
+    bind: $SNAP/usr/share/glvnd
+  /usr/share/gvfs:
+    bind: $SNAP/usr/share/gvfs
+  /usr/share/gtk-engines:
+    bind: $SNAP/usr/share/gtk-engines
+  /usr/share/glib-2.0:
+    bind: $SNAP/usr/share/glib-2.0
+  /usr/share/hal:
+    bind: $SNAP/usr/share/hal
+  /usr/share/i18n:
+    bind: $SNAP/usr/share/i18n
+  /usr/share/ibus:
+    bind: $SNAP/usr/share/ibus
+  /usr/share/icons:
+    bind: $SNAP/usr/share/icons
+  /usr/share/im-config:
+    bind: $SNAP/usr/share/im-config
+  /usr/share/pixmaps:
+    bind: $SNAP/usr/share/pixmaps
+  /usr/share/backgrounds:
+    bind: $SNAP/usr/share/backgrounds
+  /usr/share/themes:
+    bind: $SNAP/usr/share/themes
+  /var/cache/fontconfig:
+    bind: $SNAP/var/cache/fontconfig
+  /usr/share/mime:
+    bind: $SNAP/usr/share/mime
+  /usr/share/applications:
+    bind: $SNAP/usr/share/applications
+  /usr/share/locale:
+    bind: $SNAP/usr/share/locale
+  /usr/share/libwacom:
+    bind: $SNAP/usr/share/libwacom
+  /usr/share/libthai:
+    bind: $SNAP/usr/share/libthai
+  /usr/share/libgweather:
+    bind: $SNAP/usr/share/libgweather
+  /usr/share/libgphoto2:
+    bind: $SNAP/usr/share/libgphoto2
+  /usr/share/libsensors4:
+    bind: $SNAP/usr/share/libsensors4
+  /usr/share/libpam-kwallet-common:
+    bind: $SNAP/usr/share/libpam-kwallet-common
+  /usr/share/iso-codes:
+    bind: $SNAP/usr/share/iso-codes
+  /usr/share/java:
+    bind: $SNAP/usr/share/java
+  /usr/share/language-selector:
+    bind: $SNAP/usr/share/language-selector
+  /usr/share/language-support:
+    bind: $SNAP/usr/share/language-support
+  /usr/share/language-tools:
+    bind: $SNAP/usr/share/language-tools
+  /usr/share/libdrm:
+    bind: $SNAP/usr/share/libdrm
+  /usr/share/menu:
+    bind: $SNAP/usr/share/menu
+  /usr/share/p11-kit:
+    bind: $SNAP/usr/share/p11-kit
+  /usr/share/pam-configs:
+    bind: $SNAP/usr/share/pam-configs
+  /usr/share/perl:
+    bind: $SNAP/usr/share/perl
+  /usr/share/perl5:
+    bind: $SNAP/usr/share/perl5
+  /usr/share/polkit-1:
+    bind: $SNAP/usr/share/polkit-1
+  /usr/share/xml:
+    bind: $SNAP/usr/share/xml
+  /usr/share/GConf:
+    bind: $SNAP/usr/share/GConf
+  /usr/share/X11:
+    bind: $SNAP/usr/share/X11
+  /usr/share/alsa:
+    bind: $SNAP/usr/share/alsa
+  /usr/share/org.gnome.Characters:
+    bind: $SNAP/usr/share/org.gnome.Characters
+  /usr/share/dbus-1/system.conf:
+    bind-file: $SNAP/usr/share/dbus-1/system.conf
+  /usr/share/dbus-1/session.conf:
+    bind-file: $SNAP/usr/share/dbus-1/session.conf
+  /usr/share/dbus-1/services/ca.desrt.dconf.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/ca.desrt.dconf.service
+  /usr/share/dbus-1/services/org.a11y.Bus.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.a11y.Bus.service
+  /usr/share/dbus-1/services/org.fedoraproject.Config.Printing.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.fedoraproject.Config.Printing.service
+  /usr/share/dbus-1/services/org.freedesktop.ColorHelper.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.freedesktop.ColorHelper.service
+  /usr/share/dbus-1/services/org.freedesktop.FileManager1.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.freedesktop.FileManager1.service
+  /usr/share/dbus-1/services/org.freedesktop.portal.IBus.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.freedesktop.portal.IBus.service
+  /usr/share/dbus-1/services/org.freedesktop.IBus.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.freedesktop.IBus.service
+  /usr/share/dbus-1/services/org.freedesktop.secrets.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.freedesktop.secrets.service
+  /usr/share/dbus-1/services/org.gnome.Books.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Books.service
+  /usr/share/dbus-1/services/org.gnome.Calendar.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Calendar.service
+  /usr/share/dbus-1/services/org.gnome.Characters.BackgroundService.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Characters.BackgroundService.service
+  /usr/share/dbus-1/services/org.gnome.Characters.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Characters.service
+  /usr/share/dbus-1/services/org.gnome.Contacts.SearchProvider.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Contacts.SearchProvider.service
+  /usr/share/dbus-1/services/org.gnome.Contacts.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Contacts.service
+  /usr/share/dbus-1/services/ca.desrt.dconf-editor.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/ca.desrt.dconf-editor.service
+  /usr/share/dbus-1/services/org.gnome.DiskUtility.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.DiskUtility.service
+  /usr/share/dbus-1/services/org.gnome.ControlCenter.SearchProvider.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.ControlCenter.SearchProvider.service
+  /usr/share/dbus-1/services/org.gnome.Documents.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Documents.service
+  /usr/share/dbus-1/services/org.gnome.font-viewer.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.font-viewer.service
+  /usr/share/dbus-1/services/org.gnome.Logs.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Logs.service
+  /usr/share/dbus-1/services/org.gnome.Screenshot.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Screenshot.service
+  /usr/share/dbus-1/services/org.gnome.Todo.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Todo.service
+  /usr/share/dbus-1/services/org.gnome.ControlCenter.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.ControlCenter.service
+  /usr/share/dbus-1/services/org.gnome.Nautilus.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Nautilus.service
+  /usr/share/dbus-1/services/org.gnome.Shell.CalendarServer.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Shell.CalendarServer.service
+  /usr/share/dbus-1/services/org.gnome.Shell.HotplugSniffer.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Shell.HotplugSniffer.service
+  /usr/share/dbus-1/services/org.gnome.Shell.PortalHelper.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Shell.PortalHelper.service
+  /usr/share/dbus-1/services/org.gnome.Terminal.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.Terminal.service
+  /usr/share/dbus-1/services/org.gnome.evolution.dataserver.AddressBook.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.evolution.dataserver.AddressBook.service
+  /usr/share/dbus-1/services/org.gnome.evolution.dataserver.Calendar.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.evolution.dataserver.Calendar.service
+  /usr/share/dbus-1/services/org.gnome.evolution.dataserver.Sources.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.evolution.dataserver.Sources.service
+  /usr/share/dbus-1/services/org.gnome.evolution.dataserver.UserPrompter.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.evolution.dataserver.UserPrompter.service
+  /usr/share/dbus-1/services/org.gnome.keyring.PrivatePrompter.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.keyring.PrivatePrompter.service
+  /usr/share/dbus-1/services/org.gnome.keyring.SystemPrompter.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.keyring.SystemPrompter.service
+  /usr/share/dbus-1/services/org.gnome.keyring.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gnome.keyring.service
+  /usr/share/dbus-1/services/org.freedesktop.Tracker1.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.freedesktop.Tracker1.service
+  /usr/share/dbus-1/services/org.gtk.GLib.PACRunner.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gtk.GLib.PACRunner.service
+  /usr/share/dbus-1/services/org.gtk.vfs.Daemon.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gtk.vfs.Daemon.service
+  /usr/share/dbus-1/services/org.gtk.vfs.Metadata.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gtk.vfs.Metadata.service
+  /usr/share/dbus-1/services/org.gtk.vfs.UDisks2VolumeMonitor.service:
+    bind-file: $SNAP/usr/share/dbus-1/services/org.gtk.vfs.UDisks2VolumeMonitor.service
+  /usr/share/gnome-documents:
+    bind: $SNAP/usr/share/gnome-documents
+  /usr/share/fcitx:
+    bind: $SNAP/usr/share/fcitx
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /usr/share/metainfo:
+    bind: $SNAP/usr/share/metainfo
+  /usr/share/tracker:
+    bind: $SNAP/usr/share/tracker
+  /usr/share/xsessions:
+    bind: $SNAP/usr/share/xsessions
+  /var/log/gdm3:
+    bind: $SNAP_DATA/log
+  /var/lib/lightdm-data:
+    symlink: $SNAP_DATA/lightdm-data
+  /var/cache/lightdm:
+    bind: $SNAP_DATA/cache
+  /usr/bin/xkbcomp:
+    symlink: $SNAP/usr/bin/xkbcomp
+  /usr/bin/gnome-shell:
+    symlink: $SNAP/usr/bin/gnome-shell
+  /usr/bin/gnome-keyring-daemon:
+    symlink: $SNAP/usr/bin/gnome-keyring-daemon
+  /usr/bin/gnome-terminal:
+    symlink: $SNAP/usr/bin/gnome-terminal
+  /usr/bin/gnome-terminal.real:
+    symlink: $SNAP/usr/bin/gnome-terminal.real
+  /usr/bin/gnome-terminal.wrapper:
+    symlink: $SNAP/usr/bin/gnome-terminal.wrapper
+  /usr/bin/nautilus:
+    symlink: $SNAP/usr/bin/nautilus
+  /usr/bin/gnome-todo:
+    symlink: $SNAP/usr/bin/gnome-todo
+  /usr/bin/gnome-books:
+    symlink: $SNAP/usr/bin/gnome-books
+  /usr/bin/gnome-disks:
+    symlink: $SNAP/usr/bin/gnome-disks
+  /usr/bin/gnome-documents:
+    symlink: $SNAP/usr/bin/gnome-documents
+  /usr/bin/gnome-font-viewer:
+    symlink: $SNAP/usr/bin/gnome-font-viewer
+  /usr/bin/gnome-calendar:
+    symlink: $SNAP/usr/bin/gnome-calendar
+  /usr/bin/gnome-contacts:
+    symlink: $SNAP/usr/bin/gnome-contacts
+  /usr/bin/gnome-logs:
+    symlink: $SNAP/usr/bin/gnome-logs
+  /usr/bin/gnome-screenshot:
+    symlink: $SNAP/usr/bin/gnome-screenshot
+  /usr/bin/dconf-editor:
+    symlink: $SNAP/usr/bin/dconf-editor
+  /usr/bin/gjs-console:
+    symlink: $SNAP/usr/bin/gjs-console
+  /usr/bin/gjs:
+    symlink: $SNAP/usr/bin/gjs
 
 parts:
-  gdm:
+  gnome-session:
     plugin: nil
     stage-packages:
+      - libaccountsservice0
+      - libaudit1
+      - libcanberra-gtk3-0
+      - libcanberra0
+      - libgdk-pixbuf2.0-0
+      - libgdm1
+      - libglib2.0-0
+      - libgtk-3-0
+      - libkeyutils1
+      - libpam0g
+      - libselinux1
+      - libsystemd0
+      - libwrap0
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxdmcp6
+      - libatk-adaptor
+      - gir1.2-gdm-1.0
+      - gir1.2-gtkclutter-1.0
+      - libpam-modules
+      - libpam-runtime
+      - libpam-systemd
+      - adwaita-icon-theme-full
+      - gvfs-bin
+      - gnome-shell
+      - gnome-shell-common
+      - gnome-session
+      - gnome-session-bin
+      - gnome-control-center
+      - gnome-menus
+      - gnome-settings-daemon
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-ubuntu-dock
+      - gnome-terminal
+      - gnome-terminal-data
+      - gnome-desktop3-data
+      - gnome-backgrounds
+      - gnome-calculator
+      - gnome-calendar
+      - gnome-characters
+      - gnome-color-manager
+      - gnome-contacts
+      - gnome-disk-utility
+      - gnome-documents
+      - gnome-font-viewer
+      - gnome-initial-setup
+      - gnome-keyring
+      - gnome-logs
+      - gnome-online-accounts
+      - gnome-online-miners
+      - gnome-screenshot
+      - gnome-session-canberra
+      - gnome-shell-extensions
+      - gnome-sushi
+      - gnome-system-monitor
+      - gnome-themes-extra
+      - gnome-todo
+      - gnome-user-share
+      - geoclue-2.0
+      - dconf-editor
+      - evince
+      - eog
+      - file-roller
+      - gedit
+      - genisoimage
+      - ghostscript-x
+      - simple-scan
+      - rfkill
+      - tracker
+      - ibus
+      - librsvg2-common
+      - accountsservice
+      - policykit-1
+      - gsettings-desktop-schemas
+      - libglib2.0-bin
+      - dconf-cli
+      - dconf-gsettings-backend
+      - x11-common
+      - x11-xserver-utils
+      - xdg-user-dirs-gtk
+      - dbus-x11
+      - gnome-icon-theme
+      - adium-theme-ubuntu
+      - light-themes
+      - ubuntu-mono
       - gdm3
+      - libblkid1
+      - libffi6
+      - libgcrypt20
+      - libgpg-error0
+      - liblz4-1
+      - liblzma5
+      - libmount1
+      - libnss-extrausers
+      - libpcre3
+      - libuuid1
+      - lightdm
+      - lightdm-gtk-greeter
+      - ttf-ubuntu-font-family
+      - ubuntu-wallpapers
+      - sysvinit-utils
+      - zlib1g
+      - session-migration
+      - systemd
+      - at-spi2-core
+      - libatm1
+      - libglu1-mesa
+      - libgpm2
+      - libslang2
+      - ubuntu-artwork
+      - dmz-cursor-theme
+      - fonts-dejavu-core
+      - fonts-freefont-ttf
+      - fonts-cantarell
+      - xserver-xephyr
+      - xauth
+      - libpam-gnome-keyring
+      - libpam-kwallet4
+      - libpam-kwallet5
+      - nautilus
+      - locales-all
+      - locales
+      - libc-bin
+      - freeglut3
+      - libmagic1
+      #- ubuntu-settings
+    stage:
+      #- -etc/gdm3/custom.conf
+      #- -usr/lib/lightdm/lightdm-greeter-session
+      - -lib/$SNAPCRAFT_ARCH_TRIPLET/libbsd.so.0.8.7
+      - -usr/share/doc/libbsd0/changelog.Debian.gz
+      - -usr/share/doc/libcom-err2/changelog.Debian.gz
+      #- -usr/share/glib-2.0/schemas/10_ubuntu-settings.gschema.override
+    override-prime: |
+      snapcraftctl prime
+      sed -i 's/<listen.*$/<listen>unix:tmpdir=snap.ubuntu-core-desktop.<\/listen>/;s/\/auth>/\/auth>\n  <apparmor mode="disabled"\/>/' usr/share/dbus-1/session.conf
+      sed -i 's/<listen.*$/<listen>unix:tmpdir=snap.ubuntu-core-desktop-system.<\/listen>/;s/\/auth>/\/auth>\n  <apparmor mode="disabled"\/>/' usr/share/dbus-1/system.conf
+  session-launcher:
+    source: .
+    plugin: nil
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -av session-launch $SNAPCRAFT_PART_INSTALL/bin/
+      #mkdir -p $SNAPCRAFT_PART_INSTALL/etc/gdm3
+      #cp -av custom.conf $SNAPCRAFT_PART_INSTALL/etc/gdm3/
   xwayland-kiosk-helper:
-    source: https://github.com/gerboland/xwayland-kiosk-helper.git
     plugin: cmake
-    source-subdir: xwayland-preload
+    source: https://github.com/MirServer/xwayland-kiosk-helper.git
     build-packages:
       - build-essential
     stage-packages:
       - xwayland
-      - i3
       - libegl1-mesa
       - libgl1-mesa-glx
+    stage:
+      - -bin/xwayland-kiosk-launch
+  caches:
+    after: [ gnome-session, desktop-gtk3 ]
+    plugin: nil
+    build-packages:
+      - gtk-update-icon-cache
+      - libglib2.0-bin
+      - shared-mime-info
+    override-prime: |
+      set -eux
+      snapcraftctl prime
+      glib-compile-schemas usr/share/glib-2.0/schemas
+      update-mime-database usr/share/mime
+      for dir in usr/share/icons/*; do
+        if [ -f "$dir/index.theme" ]; then
+          gtk-update-icon-cache --force "$dir"
+        fi
+      done
+  desktop-gtk3:
+    build-packages:
+    - build-essential
+    - libgtk-3-dev
+    make-parameters:
+    - FLAVOR=gtk3
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    stage-packages:
+    - libxkbcommon0
+    - ttf-ubuntu-font-family
+    - dmz-cursor-theme
+    - light-themes
+    - adwaita-icon-theme
+    - gnome-themes-standard
+    - shared-mime-info
+    - libgtk-3-0
+    - libgdk-pixbuf2.0-0
+    - libglib2.0-bin
+    - libgtk-3-bin
+    - unity-gtk3-module
+    - libappindicator3-1
+    - locales-all
+    - xdg-user-dirs
+    - ibus-gtk3
+    - libibus-1.0-5
+    - fcitx-frontend-gtk3
+    - libgtk2.0-0
