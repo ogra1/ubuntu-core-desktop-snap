@@ -513,6 +513,7 @@ parts:
       - evince
       - eog
       - file-roller
+      - firefox
       - gedit
       - genisoimage
       - ghostscript-x
