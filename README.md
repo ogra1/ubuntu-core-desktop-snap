@@ -25,6 +25,6 @@ snap connect ubuntu-core-desktop:process-control
 snap connect ubuntu-core-desktop:removable-media
 snap connect ubuntu-core-desktop:shutdown
 snap connect ubuntu-core-desktop:system-observe
-snap connect ubuntu-core-desktop:x11-plug snap connect ubuntu-core-desktop:x11
+snap connect ubuntu-core-desktop:x11-plug ubuntu-core-desktop:x11
 
 ```
